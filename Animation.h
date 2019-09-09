@@ -10,17 +10,15 @@
 
 class Animation {
 public:
-    Animation(sf::Texture* texture, sf::Vector2u imageCount, float switchTime);
+    Animation(sf::Texture* texture, sf::Vector2u imageCount, float switchTime,sf::Vector2u posTile,int nbrTiles);
     ~Animation();
-    void Update(int row,float deltaTime);
-    void Update(int row,float deltaTime,int nbrPicsX);
-
+    void Update(float deltaTime);
     sf::IntRect uvRect;
 
 private:
-    sf::Vector2u imageCount;
     sf::Vector2u currentImage;
-
+    sf::Vector2u posTile;
+    int nbrTiles;
     float totalTime;
     float switchTime;
 

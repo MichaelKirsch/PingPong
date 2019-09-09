@@ -4,7 +4,7 @@ project(${PROJECT_NAME})
 set(CMAKE_CXX_STANDARD 17)
 set(SFML_DIR "${CMAKE_CURRENT_LIST_DIR}/libs/SFML-2.5.1/lib/cmake/SFML")
 
-set(SOURCE_FILES main.cpp Animation.cpp Animation.h)
+set(SOURCE_FILES main.cpp Animation.cpp Animation.h Tile.cpp Tile.h)
 
 #add_subdirectory(Dependencies/TGUI-0.8)
 

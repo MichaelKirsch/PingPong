@@ -11,7 +11,7 @@ int main() {
     dude.setOrigin(16.0f,16.0f);
     dude.setTexture(&dudes_texture);
     dude.setPosition(50.0f,50.0f);
-    Animation animation(&dudes_texture,sf::Vector2u(64,48),0.1f);
+    Animation animation(&dudes_texture,sf::Vector2u(64,48),0.3f,sf::Vector2u(16,10),3);
 
     float deltaTime = 0.0f;
     sf::Clock clock;
@@ -68,7 +68,7 @@ int main() {
 
         }
 
-        animation.Update(15,deltaTime,5);
+        animation.Update(deltaTime);
         dude.setTextureRect(animation.uvRect);
 
         window.clear();
