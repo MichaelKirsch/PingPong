@@ -5,6 +5,7 @@
 Enemy::Enemy(sf::Vector2f position, int lifes, float lifetime, sf::Texture *texture, sf::Vector2u imageCount,float switchTime, sf::Vector2u posTile, int nbrTiles) :
         animation(texture,imageCount,switchTime,posTile,nbrTiles)
 {
+    printf("Creature %p was created\n",this);
     alive = 1;
     this->Lifetime = lifetime;
     this->LifetimeBegin = lifetime;
@@ -26,7 +27,7 @@ void Enemy::Update(float deltatime) {
     if(Lifetime<=0.0f)
     {
         alive = 0;
-        printf("Creature %p died after %f seconds",this,LifetimeBegin);
+        printf("Creature %p died after %f seconds\n",this,LifetimeBegin);
     }
     else
     {
