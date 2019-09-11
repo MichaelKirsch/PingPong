@@ -17,6 +17,7 @@ private:
     sf::RectangleShape body;
     Animation animation;
     int Lifes;
+    float LifetimeBegin;
     float Lifetime;
     bool alive;
 protected:

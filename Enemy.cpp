@@ -7,6 +7,7 @@ Enemy::Enemy(sf::Vector2f position, int lifes, float lifetime, sf::Texture *text
 {
     alive = 1;
     this->Lifetime = lifetime;
+    this->LifetimeBegin = lifetime;
     this->Lifes = lifes;
     body.setSize(sf::Vector2f(32.0f,32.0f));
     body.setPosition(position);
@@ -25,7 +26,7 @@ void Enemy::Update(float deltatime) {
     if(Lifetime<=0.0f)
     {
         alive = 0;
-        printf("Creature died: %p",this);
+        printf("Creature %p died after %f seconds",this,LifetimeBegin);
     }
     else
     {
