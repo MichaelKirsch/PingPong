@@ -4,6 +4,7 @@
 
 Game::Game() : window(sf::VideoMode(800,600),"This Game is awesome"){
     window.setFramerateLimit(60);
+
 }
 
 Game::~Game() {
@@ -20,7 +21,14 @@ void Game::run() {
 }
 
 void Game::processEvents() {
-
+    sf::Event event;
+    while (window.pollEvent(event)) {
+        switch (event.type) {
+            case sf::Event::Closed:
+                window.close();
+                break;
+        }
+    }
 }
 
 void Game::updateGamestates() {
