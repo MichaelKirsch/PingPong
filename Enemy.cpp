@@ -11,6 +11,7 @@ Enemy::Enemy(sf::Vector2f position, int lifes, float lifetime, sf::Texture *text
     this->LifetimeBegin = lifetime;
     this->Lifes = lifes;
     body.setSize(sf::Vector2f(32.0f,32.0f));
+    body.setOrigin(16.0f,16.0f);
     body.setPosition(position);
     body.setTexture(texture);
 }
