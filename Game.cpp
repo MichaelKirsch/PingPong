@@ -24,13 +24,16 @@ void Game::processEvents() {
 }
 
 void Game::updateGamestates() {
-
 }
 
 void Game::render() {
     window.clear();
     //all the drawcalls
     window.display();
+}
+
+void Game::initEntities() {
+
 }
 
 
