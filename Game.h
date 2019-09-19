@@ -5,13 +5,13 @@
 #include <SFML/Graphics.hpp>
 #include "iostream"
 #include <vector>
-#include <SFML/Audio.hpp>
-#include "Animation.h"
 #include <experimental/random>
-#include "Enemy.h"
 #include <string>
 #include <sstream>
+#include <array>
 
+#define WIDTH 1000
+#define HEIGHT 1000
 
 class Game {
     public:
@@ -19,11 +19,11 @@ class Game {
         ~Game();
         void run();
     private:
+        sf::VertexArray tilemap;
         void processEvents();
         void updateGamestates();
         void render();
         void initEntities();
-
         sf::RenderWindow window;
     protected:
 };
