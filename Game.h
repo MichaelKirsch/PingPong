@@ -10,6 +10,10 @@
 #include <sstream>
 #include <array>
 #include "Person.h"
+#include <random>
+#include <chrono>
+
+
 #define WIDTH 1000
 #define HEIGHT 1000
 
@@ -23,10 +27,12 @@ class Game {
         ~Game();
         void run();
     private:
-    //TODO vector mit 1000000 stellen bauen. vector füllen, funktion schreiben die die position im vector speichert und eine schnelle collision abfrage gestalten kann.
+        std::vector<Person *>grid;
+        int randomInteger(int,int);
         bool collision(sf::Vector2f newPos);
-        void fillVector();
-        void spawnColonie(sf::Vector2f pos, int body_Count);
+        sf::Vector2f convertIntPostoVec(int position);
+        int convertVectoIntPos(sf::Vector2f position);
+        void spawnColonies(int nbrCols, int body_Count);
         int getPosInVertexArray(sf::Vector2f position);
         sf::VertexArray tilemap;
         std::vector<Person> entities;
@@ -34,9 +40,8 @@ class Game {
         void processEvents();
         void updateGamestates();
         void render();
-        void initEntities();
-        sf::RenderWindow window;
         bool move(Person& dude);
+        sf::RenderWindow window;
 
 protected:
 };

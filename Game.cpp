@@ -3,27 +3,25 @@
 #include "Game.h"
 
 Game::Game() : window(sf::VideoMode(WIDTH,HEIGHT),"Automata"){
-    window.setFramerateLimit(60);
-    tilemap.setPrimitiveType(sf::Points);
-    tilemap.resize(WIDTH*HEIGHT);
-    //fillVector();
+        window.setFramerateLimit(60);
+        tilemap.setPrimitiveType(sf::Points);
+        tilemap.resize(WIDTH*HEIGHT);
+        grid.resize(WIDTH*HEIGHT);
+        std::experimental::reseed(std::default_random_engine::modulus); //TODO scheis random generator zum laufen kriegen
+        for(auto& item:grid)
+        {
+            item = nullptr;
+        }
 
-    int counter=0;
-    //make the map "grey" and empty. From there on we will spawn the random colonies
-    for (int y=0;y<=HEIGHT-1;y++)
-    {
-        for(int x=0;x<=WIDTH-1;x++)
-            {
-                counter++;
-                tilemap[counter].position = sf::Vector2f((float)x, (float)y);
-                tilemap[counter].color = sf::Color::White;
-            }
-    }
 
-    for(int nbrcol =0;nbrcol<10;nbrcol++)
-    {
-        spawnColonie(sf::Vector2f((float)std::experimental::randint(200,HEIGHT-200),(float)std::experimental::randint(200,WIDTH-200)),40);
-    }
+        //make the map "grey" and empty. From there on we will spawn the random colonies
+        for(int x = 0;x<grid.size();x++)
+        {
+                    tilemap[x].position =convertIntPostoVec(x);
+                    tilemap[x].color = sf::Color::White;
+        }
+
+        spawnColonies(10, 10);
 
 }
 
@@ -101,7 +99,11 @@ bool Game::friendDetection(Person person1, Person person2) {
 
 }
 
-void Game::spawnColonie(sf::Vector2f pos, int body_Count) {
+void Game::spawnColonies(int nbrCols, int body_Count) {
+    for(int colNbr =0;colNbr<nbrCols;colNbr++)
+    {
+
+        sf::Vector2f pos = sf::Vector2f((float)std::experimental::randint((int)(HEIGHT*0.05),(int)HEIGHT),(float)std::experimental::randint((int)(HEIGHT*0.05),(int)HEIGHT));
 
         int maxAge = SKILL_START;
         int reproductionBonus = SKILL_START;
@@ -116,12 +118,15 @@ void Game::spawnColonie(sf::Vector2f pos, int body_Count) {
         maxAge+=first_stage;
         reproductionBonus+=second_stage;
         strength+=third_stage;
-    for(int x =0;x<body_Count;x++)
-    {
-        sf::Vector2f position = sf::Vector2f(pos.x+body_Count,pos.y+std::experimental::randint(0,body_Count));
-        entities.push_back(Person(position ,maxAge,strength,reproductionBonus));
+        for(int x =0;x<body_Count;x++)
+        {
+            sf::Vector2f position = sf::Vector2f(pos.x+body_Count,pos.y+std::experimental::randint(0,body_Count));
+            entities.push_back(Person(position ,maxAge,strength,reproductionBonus));
+            grid[convertVectoIntPos(position)] = &entities.back();
+        }
+        std::cout<<"Created Colony at x:" << pos.x << " y:" << pos.y << " with bodycount of " << body_Count << std::endl;
     }
-    std::cout<<"Created Colonie at x:" << pos.x << " y:" << pos.y << " with bodycount of " << body_Count << std::endl;
+
 }
 
 int Game::getPosInVertexArray(sf::Vector2f position) {
@@ -169,6 +174,18 @@ bool Game::collision(sf::Vector2f newPos) {
     }
     return true;
 }
+
+sf::Vector2f Game::convertIntPostoVec(int position) {
+    int y = position/HEIGHT;
+    int x = position%HEIGHT;
+    return sf::Vector2f(x,y);
+}
+
+int Game::convertVectoIntPos(sf::Vector2f position) {
+    return position.x*position.y;
+}
+
+
 
 
 

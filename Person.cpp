@@ -5,10 +5,8 @@ void Person::update() {
     age++;
     reproductionValue++; //the person will age and get more "grown" at every tick
 
-
     if(age>maxAge)
     {
-
         //std::cout << this << "died" << std::endl;
         alive=false;
     }
