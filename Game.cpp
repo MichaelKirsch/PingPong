@@ -152,8 +152,8 @@ bool Game::move(Person& dude) {
             }
             else
             {
-                dude.setPosition(newPos);
                 value.kill();
+                dude.setPosition(newPos);
                 return true;
             }
         }

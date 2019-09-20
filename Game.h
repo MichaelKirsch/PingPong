@@ -22,29 +22,30 @@
 #define FRIEND_THRESHOLD 50 //how different can persons be before they will fight
 
 class Game {
+    //VARS
     public:
         Game();
         ~Game();
+    private:
+        sf::RenderWindow window;
+        std::vector<Person *>grid;
+        sf::VertexArray tilemap;
+        std::vector<Person> entities;
+    //FUNCTIONS
+    public:
         void run();
     private:
-        std::vector<Person *>grid;
-        int randomInteger(int,int);
         bool collision(sf::Vector2f newPos);
         sf::Vector2f convertIntPostoVec(int position);
         int convertVectoIntPos(sf::Vector2f position);
         void spawnColonies(int nbrCols, int body_Count);
         int getPosInVertexArray(sf::Vector2f position);
-        sf::VertexArray tilemap;
-        std::vector<Person> entities;
         bool friendDetection(Person person1, Person person2);
         void processEvents();
         void updateGamestates();
         void render();
         bool move(Person& dude);
-        sf::RenderWindow window;
-
-protected:
-};
+    };
 
 
 
