@@ -16,7 +16,7 @@ Game::Game() : window(sf::VideoMode(WIDTH,HEIGHT),"Automata"){
             {
                 counter++;
                 tilemap[counter].position = sf::Vector2f((float)x, (float)y);
-                tilemap[counter].color = sf::Color(50,50,50);
+                tilemap[counter].color = sf::Color::White;
             }
     }
 
@@ -52,6 +52,28 @@ void Game::processEvents() {
 }
 
 void Game::updateGamestates() {
+    for(int x =0;x<HEIGHT*WIDTH;x++)
+    {
+        tilemap[x].color = sf::Color::White;
+    }
+    for(auto& dude:entities)
+    {
+        dude.update();
+        move(dude);
+        if(dude.checkReproduction())
+        {
+            dude.reproduce();
+            sf::Vector2f newpos = sf::Vector2f(dude.getPosition().x+std::experimental::randint(-1,1),dude.getPosition().y+std::experimental::randint(-1,1));
+
+            entities.push_back(Person(newpos,dude.getAge(),dude.getStrength(),dude.getreproductionBonus(),
+                                      true));
+            //TODO check the new spawn for clashes
+
+        }
+        tilemap[getPosInVertexArray(dude.getPosition())].color = sf::Color(dude.getColor().x,dude.getColor().y,dude.getColor().z);
+    }
+
+
     for(int x =0;x<entities.size();x++)
     {
         entities[x].update();
@@ -59,8 +81,12 @@ void Game::updateGamestates() {
         if(entities[x].checkReproduction())
         {
             entities[x].reproduce();
-            sf::Vector2f newpos = sf::Vector2f(entities[x].getPosition().x+std::experimental::randint(5-10,10),entities[x].getPosition().y+std::experimental::randint(-10,10));
-            entities.push_back(Person(newpos,entities[x].getAge(),entities[x].getStrength(),entities[x].getreproductionBonus()));
+            sf::Vector2f newpos = sf::Vector2f(entities[x].getPosition().x+std::experimental::randint(-10,10),entities[x].getPosition().y+std::experimental::randint(-10,10));
+            if(!collision(newpos))
+            {
+                entities.push_back(Person(newpos,entities[x].getAge(),entities[x].getStrength(),entities[x].getreproductionBonus(),
+                                          true));
+            }
         }
 
         int red = entities[x].getColor().x;
@@ -73,7 +99,6 @@ void Game::updateGamestates() {
     {
         if(!entities[x].isAlive())
         {
-            tilemap[getPosInVertexArray(entities[x].getPosition())].color = sf::Color(50,50,50);
             entities.erase(entities.begin()+x);
         }
     }
@@ -150,6 +175,19 @@ bool Game::move(Person& dude) {
         }
     }
     dude.setPosition(newPos);
+    return true;
+}
+
+bool Game::collision(sf::Vector2f newPos) {
+    if(newPos.x>WIDTH||newPos.x<0||newPos.y>HEIGHT||newPos.y<0)
+        return false;
+    for(auto& dudes:entities)
+    {
+        if(dudes.getPosition()==newPos)
+        {
+            return false;
+        }
+    }
     return true;
 }
 
