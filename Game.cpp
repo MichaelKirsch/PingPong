@@ -6,7 +6,7 @@ Game::Game() : window(sf::VideoMode(WIDTH,HEIGHT),"Automata"){
     window.setFramerateLimit(60);
     tilemap.setPrimitiveType(sf::Points);
     tilemap.resize(WIDTH*HEIGHT);
-
+    //fillVector();
 
     int counter=0;
     //make the map "grey" and empty. From there on we will spawn the random colonies
@@ -62,39 +62,18 @@ void Game::updateGamestates() {
         move(dude);
         if(dude.checkReproduction())
         {
-            dude.reproduce();
-            sf::Vector2f newpos = sf::Vector2f(dude.getPosition().x+std::experimental::randint(-1,1),dude.getPosition().y+std::experimental::randint(-1,1));
 
-            entities.push_back(Person(newpos,dude.getAge(),dude.getStrength(),dude.getreproductionBonus(),
-                                      true));
-            //TODO check the new spawn for clashes
+            sf::Vector2f newpos = sf::Vector2f(dude.getPosition().x+std::experimental::randint(-1,1),dude.getPosition().y+std::experimental::randint(-1,1));
+            if(!collision(newpos))
+            {
+                dude.reproduce();
+                entities.push_back(Person(newpos,dude.getAge(),dude.getStrength(),dude.getreproductionBonus(),
+                                          true));
+            }
 
         }
         tilemap[getPosInVertexArray(dude.getPosition())].color = sf::Color(dude.getColor().x,dude.getColor().y,dude.getColor().z);
     }
-
-
-    for(int x =0;x<entities.size();x++)
-    {
-        entities[x].update();
-        move(entities[x]);
-        if(entities[x].checkReproduction())
-        {
-            entities[x].reproduce();
-            sf::Vector2f newpos = sf::Vector2f(entities[x].getPosition().x+std::experimental::randint(-10,10),entities[x].getPosition().y+std::experimental::randint(-10,10));
-            if(!collision(newpos))
-            {
-                entities.push_back(Person(newpos,entities[x].getAge(),entities[x].getStrength(),entities[x].getreproductionBonus(),
-                                          true));
-            }
-        }
-
-        int red = entities[x].getColor().x;
-        int green = entities[x].getColor().y;
-        int blue = entities[x].getColor().z;
-        tilemap[getPosInVertexArray(entities[x].getPosition())].color = sf::Color(red,green,blue);
-    }
-
     for(int x =0;x<entities.size();x++)
     {
         if(!entities[x].isAlive())
@@ -152,7 +131,7 @@ int Game::getPosInVertexArray(sf::Vector2f position) {
 bool Game::move(Person& dude) {
     bool collision = false;
     sf::Vector2f newPos=sf::Vector2f(dude.getPosition().x+std::experimental::randint(-1,1),dude.getPosition().y+std::experimental::randint(-1,1));
-    if(newPos.y>HEIGHT||newPos.y<0||newPos.x>WIDTH||newPos.x<0)
+    if(newPos.y>HEIGHT-2||newPos.y<2||newPos.x>WIDTH-2||newPos.x<2)
         return true;
     for(auto& value: entities) {
         if(value.getPosition()==newPos)
@@ -179,7 +158,7 @@ bool Game::move(Person& dude) {
 }
 
 bool Game::collision(sf::Vector2f newPos) {
-    if(newPos.x>WIDTH||newPos.x<0||newPos.y>HEIGHT||newPos.y<0)
+    if(newPos.x>WIDTH-2||newPos.x<2||newPos.y>HEIGHT-2||newPos.y<2)
         return false;
     for(auto& dudes:entities)
     {
@@ -190,6 +169,7 @@ bool Game::collision(sf::Vector2f newPos) {
     }
     return true;
 }
+
 
 
 

@@ -3,7 +3,7 @@
 #include "SFML/Graphics.hpp"
 #include <experimental/random>
 #include <iostream>
-#define REPRODUCTION_THRESHOLD 30
+#define REPRODUCTION_THRESHOLD 18
 
 class Person {
 public:

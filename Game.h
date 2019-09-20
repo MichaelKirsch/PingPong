@@ -23,7 +23,9 @@ class Game {
         ~Game();
         void run();
     private:
+    //TODO vector mit 1000000 stellen bauen. vector füllen, funktion schreiben die die position im vector speichert und eine schnelle collision abfrage gestalten kann.
         bool collision(sf::Vector2f newPos);
+        void fillVector();
         void spawnColonie(sf::Vector2f pos, int body_Count);
         int getPosInVertexArray(sf::Vector2f position);
         sf::VertexArray tilemap;
