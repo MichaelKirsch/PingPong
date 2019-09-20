@@ -23,6 +23,7 @@ class Game {
         ~Game();
         void run();
     private:
+
         void spawnColonie(sf::Vector2f pos, int body_Count);
         int getPosInVertexArray(sf::Vector2f position);
         sf::VertexArray tilemap;
@@ -33,7 +34,9 @@ class Game {
         void render();
         void initEntities();
         sf::RenderWindow window;
-    protected:
+        bool move(Person& dude);
+
+protected:
 };
 
 

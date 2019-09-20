@@ -6,6 +6,8 @@ Game::Game() : window(sf::VideoMode(WIDTH,HEIGHT),"Automata"){
     window.setFramerateLimit(60);
     tilemap.setPrimitiveType(sf::Points);
     tilemap.resize(WIDTH*HEIGHT);
+
+
     int counter=0;
     //make the map "grey" and empty. From there on we will spawn the random colonies
     for (int y=0;y<=HEIGHT-1;y++)
@@ -20,7 +22,7 @@ Game::Game() : window(sf::VideoMode(WIDTH,HEIGHT),"Automata"){
 
     for(int nbrcol =0;nbrcol<10;nbrcol++)
     {
-        spawnColonie(sf::Vector2f((float)std::experimental::randint(80,HEIGHT),(float)std::experimental::randint(80,WIDTH)),40);
+        spawnColonie(sf::Vector2f((float)std::experimental::randint(200,HEIGHT-200),(float)std::experimental::randint(200,WIDTH-200)),40);
     }
 
 }
@@ -53,6 +55,14 @@ void Game::updateGamestates() {
     for(int x =0;x<entities.size();x++)
     {
         entities[x].update();
+        move(entities[x]);
+        if(entities[x].checkReproduction())
+        {
+            entities[x].reproduce();
+            sf::Vector2f newpos = sf::Vector2f(entities[x].getPosition().x+std::experimental::randint(5-10,10),entities[x].getPosition().y+std::experimental::randint(-10,10));
+            entities.push_back(Person(newpos,entities[x].getAge(),entities[x].getStrength(),entities[x].getreproductionBonus()));
+        }
+
         int red = entities[x].getColor().x;
         int green = entities[x].getColor().y;
         int blue = entities[x].getColor().z;
@@ -67,7 +77,7 @@ void Game::updateGamestates() {
             entities.erase(entities.begin()+x);
         }
     }
-
+    std::cout<< "Entities: " << entities.size() <<std::endl;
 }
 
 void Game::render() {
@@ -113,6 +123,38 @@ void Game::spawnColonie(sf::Vector2f pos, int body_Count) {
 int Game::getPosInVertexArray(sf::Vector2f position) {
     return (position.y*HEIGHT)+position.x;
 }
+
+bool Game::move(Person& dude) {
+    bool collision = false;
+    sf::Vector2f newPos=sf::Vector2f(dude.getPosition().x+std::experimental::randint(-1,1),dude.getPosition().y+std::experimental::randint(-1,1));
+    if(newPos.y>HEIGHT||newPos.y<0||newPos.x>WIDTH||newPos.x<0)
+        return true;
+    for(auto& value: entities) {
+        if(value.getPosition()==newPos)
+        {
+            if(friendDetection(value,dude))
+            {
+                //stay put
+                return true;
+            }
+            if(value.getStrength()>dude.getStrength())
+            {
+                return false;
+            }
+            else
+            {
+                dude.setPosition(newPos);
+                value.kill();
+                return true;
+            }
+        }
+    }
+    dude.setPosition(newPos);
+    return true;
+}
+
+
+
 
 
 

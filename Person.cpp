@@ -8,16 +8,19 @@ void Person::update() {
 
     if(age>maxAge)
     {
-        //dies
-        std::cout << this << "died" << std::endl;
+
+        //std::cout << this << "died" << std::endl;
         alive=false;
     }
 
 }
 
 bool Person::checkReproduction() {
-    if(reproductionValue>REPRODUCTION_THRESHOLD-reproductionBonus/10)
+    if(reproductionValue>REPRODUCTION_THRESHOLD)
+    {
         return true;
+    }
+    return false;
 }
 
 void Person::kill() {
@@ -47,3 +50,13 @@ Person::Person(sf::Vector2f position,int maxAge, int strength, int reproductionB
     age = 0;
     reproductionValue = 0;
 }
+
+void Person::reproduce() {
+    reproductionValue = 0;
+}
+
+void Person::setPosition(sf::Vector2f new_position) {
+    position=new_position;
+}
+
+

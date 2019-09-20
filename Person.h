@@ -3,7 +3,7 @@
 #include "SFML/Graphics.hpp"
 #include <experimental/random>
 #include <iostream>
-#define REPRODUCTION_THRESHOLD 30
+#define REPRODUCTION_THRESHOLD 50
 
 class Person {
 public:
@@ -12,12 +12,14 @@ public:
     void update();
     sf::Vector3i getColor();
     int getAge(){ return age;};
-    int getStrength(){ return strength;};
+    void reproduce();
+    int getStrength() const { return strength;};
     bool isAlive(){return alive;};
     void kill();
     int getReproductionValue(){return reproductionValue;};
     bool checkReproduction();
-    sf::Vector2f getPosition(){ return position;};
+    int getreproductionBonus() { return reproductionBonus;};
+    sf::Vector2f getPosition() const { return position;};
     void setPosition(sf::Vector2f new_position);
 private:
     void scan();
