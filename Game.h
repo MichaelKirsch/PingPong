@@ -41,6 +41,7 @@ class Game {
         void spawnColonies(int nbrCols, int body_Count);
         int getPosInVertexArray(sf::Vector2f position);
         bool friendDetection(Person person1, Person person2);
+        bool friendDetection(Person* person1, Person* person2);
         void processEvents();
         void updateGamestates();
         void render();

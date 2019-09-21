@@ -99,6 +99,16 @@ bool Game::friendDetection(Person person1, Person person2) {
 
 }
 
+bool Game::friendDetection(Person *person1, Person *person2) {
+    int dif1 = abs(person1->getColor().x - person2->getColor().x);
+    int dif2 = abs(person1->getColor().y - person2->getColor().y);
+    int dif3 = abs(person1->getColor().z - person2->getColor().z);
+
+    if(dif1+dif2+dif3 > FRIEND_THRESHOLD)
+        return false;
+    return true;
+}
+
 void Game::spawnColonies(int nbrCols, int body_Count) {
     for(int colNbr =0;colNbr<nbrCols;colNbr++)
     {
@@ -138,29 +148,28 @@ bool Game::move(Person& dude) {
     sf::Vector2f newPos=sf::Vector2f(dude.getPosition().x+std::experimental::randint(-1,1),dude.getPosition().y+std::experimental::randint(-1,1));
     if(newPos.y>HEIGHT-2||newPos.y<2||newPos.x>WIDTH-2||newPos.x<2)
         return true;
-    for(auto& value: entities) {
-        if(value.getPosition()==newPos)
+
+    if(grid[convertVectoIntPos(newPos)] != nullptr) //If its not a nullptr there is something there
+    {
+        if(friendDetection(grid[convertVectoIntPos(newPos)],&dude )) //if its a friend then the person will stay put
         {
-            if(friendDetection(value,dude))
-            {
-                //stay put
-                return true;
-            }
-            if(value.getStrength()>dude.getStrength())
-            {
-                return false;
-            }
-            else
-            {
-                value.kill();
-                dude.setPosition(newPos);
-                return true;
-            }
+            std::cout<<"Position occupied. Friendly!" << std::endl;
+            return true; //dont do anything
+        }
+        if(dude.getStrength()<grid[convertVectoIntPos(newPos)]->getStrength()) //if he clashes with an enemy and looses he will die
+        {
+            std::cout << "Position occupied. Enemy! He died" << std::endl;
+            return false;
+        }
+        //TODO irgendwie die andere Person zerstören
+        grid[convertVectoIntPos(dude.getPosition())] = nullptr; //where he was standing is now a free space
+        grid[convertVectoIntPos(newPos)] = &dude;
+        dude.setPosition(newPos);
+        std::cout<<"Position occupied. Enemy! He survived" << std::endl;
+        return true;
         }
     }
-    dude.setPosition(newPos);
-    return true;
-}
+
 
 bool Game::collision(sf::Vector2f newPos) {
     if(newPos.x>WIDTH-2||newPos.x<2||newPos.y>HEIGHT-2||newPos.y<2)
@@ -184,6 +193,8 @@ sf::Vector2f Game::convertIntPostoVec(int position) {
 int Game::convertVectoIntPos(sf::Vector2f position) {
     return position.x*position.y;
 }
+
+
 
 
 
