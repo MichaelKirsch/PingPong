@@ -40,6 +40,7 @@ Person::~Person() {
 Person::Person(sf::Vector2f position,int maxAge, int strength, int reproductionBonus) {
     //when a person gets generated it will get 255 points. it has to spend at least 30 on every of the three skills strength, reproductionBonus, maxAge.
     //the rest of the points will be set randomly. whenever there is a reproduction there is a slight chance of a shift in its values (mutation)
+    createdPersons++;
     alive = true;
     this->position = position;
     this->maxAge = maxAge;
@@ -52,6 +53,7 @@ Person::Person(sf::Vector2f position,int maxAge, int strength, int reproductionB
 Person::Person(sf::Vector2f position,int maxAge, int strength, int reproductionBonus,bool mutation) {
     //when a person gets generated it will get 255 points. it has to spend at least 30 on every of the three skills strength, reproductionBonus, maxAge.
     //the rest of the points will be set randomly. whenever there is a reproduction there is a slight chance of a shift in its values (mutation)
+    createdPersons++;
     alive = true;
     this->position = position;
     this->maxAge = maxAge;

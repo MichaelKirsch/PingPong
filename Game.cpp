@@ -153,19 +153,22 @@ bool Game::move(Person& dude) {
     {
         if(friendDetection(grid[convertVectoIntPos(newPos)],&dude )) //if its a friend then the person will stay put
         {
-            std::cout<<"Position occupied. Friendly!" << std::endl;
+            //std::cout<<"Position occupied. Friendly!" << std::endl;
             return true; //dont do anything
         }
         if(dude.getStrength()<grid[convertVectoIntPos(newPos)]->getStrength()) //if he clashes with an enemy and looses he will die
         {
-            std::cout << "Position occupied. Enemy! He died" << std::endl;
+            //std::cout << "Position occupied. Enemy! He died" << std::endl;
             return false;
         }
-        //TODO irgendwie die andere Person zerstören
+        std::cout<<"1:"<<entities.size()<<std::endl;
+        grid[convertVectoIntPos(newPos)]->~Person();
+        std::cout<<"2:"<<entities.size()<<std::endl;
         grid[convertVectoIntPos(dude.getPosition())] = nullptr; //where he was standing is now a free space
         grid[convertVectoIntPos(newPos)] = &dude;
+        std::cout<<"3:"<<grid[convertVectoIntPos(newPos)]<<std::endl;
         dude.setPosition(newPos);
-        std::cout<<"Position occupied. Enemy! He survived" << std::endl;
+        //std::cout<<"Position occupied. Enemy! He survived" << std::endl;
         return true;
         }
     }
